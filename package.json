@@ -1,0 +1,20 @@
+{
+  "name": "nexus-deck",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NEXUS DECK — premium Steam Deck-inspired wireless PC control system",
+  "scripts": {
+    "dev:client": "pnpm --filter @nexus-deck/client dev",
+    "dev:agent": "pnpm --filter @nexus-deck/agent dev",
+    "build": "pnpm -r build",
+    "build:client": "pnpm --filter @nexus-deck/client build",
+    "build:agent": "pnpm --filter @nexus-deck/agent build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.34.9"
+}
