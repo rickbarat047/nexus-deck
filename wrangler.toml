@@ -1,9 +1,0 @@
-name = "nexus-deck-client"
-compatibility_date = "2026-11-07"
-
-[build]
-command = "pnpm --filter @nexus-deck/client build"
-output = "apps/client/dist"
-
-[env.production]
-name = "nexus-deck"
