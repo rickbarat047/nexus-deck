@@ -1,0 +1,1 @@
+{"version":3,"file":"launcher.d.ts","sourceRoot":"","sources":["../../src/applications/launcher.ts"],"names":[],"mappings":"AAIA,MAAM,WAAW,YAAY;IAC3B,EAAE,EAAE,OAAO,CAAC;IACZ,OAAO,EAAE,MAAM,CAAC;IAChB,GAAG,CAAC,EAAE,MAAM,CAAC;CACd;AAED,wBAAsB,iBAAiB,CAAC,cAAc,EAAE,MAAM,EAAE,IAAI,GAAE,MAAM,EAAO,GAAG,OAAO,CAAC,YAAY,CAAC,CAsC1G"}

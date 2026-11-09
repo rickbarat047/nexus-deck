@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NEXUS DECK</title>
+  <meta charset="utf-8">
+  <script>
+    // SPA fallback: redirect to index.html preserving path
+    const path = window.location.pathname;
+    const redirect = path === '/404.html' ? '/' : path;
+    window.location.replace(redirect);
+  </script>
+</head>
+<body>
+  <a href="/">Go to home</a>
+</body>
+</html>

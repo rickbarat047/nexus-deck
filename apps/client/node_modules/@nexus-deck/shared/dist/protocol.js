@@ -1,0 +1,33 @@
+export const WS_EVENTS = {
+    CLIENT_AUTHENTICATE: "client:authenticate",
+    APP_LAUNCH: "app:launch",
+    ACTION_EXECUTE: "action:execute",
+    METRICS_SUBSCRIBE: "metrics:subscribe",
+    METRICS_UNSUBSCRIBE: "metrics:unsubscribe",
+    PING: "ping",
+    CONNECTION_READY: "connection:ready",
+    CONNECTION_STATUS: "connection:status",
+    ACTION_STARTED: "action:started",
+    ACTION_COMPLETED: "action:completed",
+    ACTION_FAILED: "action:failed",
+    METRICS_UPDATE: "metrics:update",
+    APPS_UPDATED: "apps:updated",
+    SYSTEM_SHUTDOWN_WARNING: "system:shutdown_warning",
+    PAIRING_REVOKED: "pairing:revoked",
+};
+export const ERROR_CODES = {
+    PC_OFFLINE: "PC_OFFLINE",
+    APP_NOT_FOUND: "APP_NOT_FOUND",
+    PAIRING_EXPIRED: "PAIRING_EXPIRED",
+    UNSUPPORTED_SENSOR: "UNSUPPORTED_SENSOR",
+    ACTION_DENIED: "ACTION_DENIED",
+    CERTIFICATE_ERROR: "CERTIFICATE_ERROR",
+    INVALID_TOKEN: "INVALID_TOKEN",
+    RATE_LIMITED: "RATE_LIMITED",
+    INVALID_REQUEST: "INVALID_REQUEST",
+    PATH_INVALID: "PATH_INVALID",
+    ACTION_NOT_FOUND: "ACTION_NOT_FOUND",
+    CONFIRMATION_REQUIRED: "CONFIRMATION_REQUIRED",
+    UNSUPPORTED: "UNSUPPORTED",
+};
+//# sourceMappingURL=protocol.js.map
