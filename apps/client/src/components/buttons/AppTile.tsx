@@ -15,11 +15,11 @@ export default function AppTile({ button, onRemove }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const disabled = status !== "connected";
-  const critical = button.actionId === "restart_pc" || button.actionId === "shutdown_pc";
+  const isCritical = button.actionId === "restart_pc" || button.actionId === "shutdown_pc";
 
   async function handlePress(e: React.MouseEvent) {
     if (disabled || running) return;
-    if (critical && button.actionId && !window.confirm(`Confirm ${button.actionId.replace("_", " ")}?`)) {
+    if (isCritical && button.actionId && !window.confirm(`Are you sure you want to ${button.actionId.replace("_", " ")} your PC?`)) {
       setRunning(false);
       return;
     }
@@ -30,8 +30,8 @@ export default function AppTile({ button, onRemove }: Props) {
         sendLaunch(button.applicationId);
         setTimeout(() => setRunning(false), 800);
       } else if (button.actionId) {
-        const confirmed = critical || button.actionId === "sleep_pc";
-        sendAction(button.actionId, crypto.randomUUID(), button.configuration ?? {}, confirmed);
+        const needsConfirm = isCritical || button.actionId === "sleep_pc";
+        sendAction(button.actionId, crypto.randomUUID(), button.configuration ?? {}, needsConfirm);
         setTimeout(() => setRunning(false), 800);
       }
     } catch (e) {
@@ -45,6 +45,8 @@ export default function AppTile({ button, onRemove }: Props) {
     if (onRemove) onRemove();
   }
 
+  const buttonLabel = button.label || "Button";
+
   return (
     <motion.button
       whileTap={{ scale: 0.94 }}
@@ -54,7 +56,7 @@ export default function AppTile({ button, onRemove }: Props) {
       style={{ borderColor: button.color ?? "transparent", borderWidth: button.color ? 1 : 0 }}
     >
       <div className="text-2xl">{button.icon ?? "⚡"}</div>
-      <div className="text-xs font-medium text-center line-clamp-2">{button.label}</div>
+      <div className="text-xs font-medium text-center line-clamp-2">{buttonLabel}</div>
       {running && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-2xl">
           <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
@@ -65,7 +67,7 @@ export default function AppTile({ button, onRemove }: Props) {
         <button
           onClick={handleRemove}
           className="absolute top-1 right-1 w-5 h-5 rounded-full bg-danger/20 text-danger text-[10px] flex items-center justify-center hover:bg-danger"
-          title="remove"
+          title="Remove"
         >
           ✕
         </button>

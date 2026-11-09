@@ -4,8 +4,9 @@ import { api } from "../websocket/client";
 import AppTile from "../components/buttons/AppTile";
 import BottomNav from "../components/navigation/BottomNav";
 import MonitorView from "../components/monitoring/MonitorView";
-import { Plus, Wifi, WifiOff } from "lucide-react";
+import { Plus, Wifi, WifiOff, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
+import { connect } from "../websocket/client";
 
 export default function Dashboard() {
   const { pages, buttons, currentPageId, gridSize } = useDashboardStore();
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const [newAction, setNewAction] = useState<string | null>(null);
   const [apps, setApps] = useState<any[]>([]);
+  const [reconnecting, setReconnecting] = useState(false);
 
   useEffect(() => {
     if (useConnectionStore.getState().status !== "connected") return;
@@ -43,11 +45,24 @@ export default function Dashboard() {
     defaults.forEach((b) => addButton(b as any));
   }, [apps, buttons.length, pages, addButton]);
 
+  const handleReconnect = async () => {
+    setReconnecting(true);
+    try {
+      connect();
+      setTimeout(() => setReconnecting(false), 1500);
+    } catch {
+      setReconnecting(false);
+    }
+  };
+
   const pageButtons = buttons
     .filter((b) => b.pageId === currentPageId)
     .sort((a, b) => a.position - b.position);
 
   const cols = gridSize;
+
+  const connectionLabel = status === "connected" ? "PC Connected" : status === "connecting" ? "Connecting…" : "Your PC is offline";
+  const connectionColor = status === "connected" ? "text-success" : status === "connecting" ? "text-text-secondary" : "text-danger";
 
   function handleAdd() {
     if (!newLabel.trim()) return;
@@ -75,13 +90,24 @@ export default function Dashboard() {
       <header className="flex items-center justify-between px-4 py-3 bg-bg-secondary border-b border-card-elevated">
         <div className="flex items-center gap-2">
           <span className="text-accent font-bold tracking-wide">NEXUS DECK</span>
-          <span className="text-xs text-text-secondary">{pcName ?? "PC"}</span>
+          <span className="text-xs text-text-secondary">{pcName ?? "Your PC"}</span>
         </div>
         <div className="flex items-center gap-2 text-xs">
           {status === "connected" ? (
-            <><Wifi size={16} className="text-success mr-1" /><span>connected</span></>
+            <><Wifi size={16} className="text-success mr-1" /><span className="text-success">{connectionLabel}</span></>
+          ) : status === "connecting" ? (
+            <><RefreshCw size={16} className="text-text-secondary animate-spin mr-1" /><span className="text-text-secondary">{connectionLabel}</span></>
           ) : (
-            <><WifiOff size={16} className="text-danger mr-1" /><span>{status}</span></>
+            <><WifiOff size={16} className="text-danger mr-1" /><span className="text-danger">{connectionLabel}</span></>
+          )}
+          {status !== "connected" && (
+            <button
+              onClick={handleReconnect}
+              disabled={reconnecting}
+              className="ml-2 py-1 px-2 rounded-lg border border-accent/30 bg-accent/5 text-accent text-xs font-medium hover:bg-accent/10 transition"
+            >
+              {reconnecting ? "Trying…" : "Reconnect"}
+            </button>
           )}
         </div>
       </header>
@@ -135,32 +161,32 @@ export default function Dashboard() {
                   onClick={() => setSelectedApp(null)}
                   className={`px-3 py-2 rounded-lg text-xs border ${!selectedApp ? "bg-accent text-black border-accent" : "bg-bg-secondary border-card-elevated text-text-secondary hover:bg-card/50"}`}
                 >
-                  Custom action
+                  Simple Action
                 </button>
               </div>
             </div>
 
             {selectedApp === null && (
               <div className="space-y-2">
-                <label className="text-xs text-text-secondary block">Action</label>
+                <label className="text-xs text-text-secondary block">What should it do?</label>
                 <select
                   value={newAction ?? ""}
                   onChange={(e) => setNewAction(e.target.value || null)}
                   className="w-full bg-bg-secondary rounded-lg px-3 py-2 text-sm outline-none focus:border-accent"
                 >
-                  <option value="">Choose action</option>
-                  <option value="media_play_pause">Media Play/Pause</option>
-                  <option value="media_next">Media Next</option>
-                  <option value="media_previous">Media Previous</option>
+                  <option value="">Choose an action</option>
+                  <option value="media_play_pause">Play / Pause Music</option>
+                  <option value="media_next">Next Track</option>
+                  <option value="media_previous">Previous Track</option>
                   <option value="volume_up">Volume Up</option>
                   <option value="volume_down">Volume Down</option>
-                  <option value="volume_mute">Mute</option>
+                  <option value="volume_mute">Mute Sound</option>
                   <option value="lock_pc">Lock PC</option>
                   <option value="sleep_pc">Sleep PC</option>
-                  <option value="open_task_manager">Task Manager</option>
-                  <option value="open_settings">Settings</option>
-                  <option value="open_file_explorer">File Explorer</option>
-                  <option value="take_screenshot">Screenshot</option>
+                  <option value="open_task_manager">Open Task Manager</option>
+                  <option value="open_settings">Open PC Settings</option>
+                  <option value="open_file_explorer">Open File Explorer</option>
+                  <option value="take_screenshot">Take Screenshot</option>
                 </select>
               </div>
             )}
